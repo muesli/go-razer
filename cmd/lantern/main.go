@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"image/color"
 	"log"
 	"time"
 
@@ -14,9 +15,10 @@ import (
 
 var (
 	col        = flag.String("color", "", "Sets the entire keyboard to this color")
-	top        = flag.Bool("top", false, "top mode")
-	effect     = flag.String("effect", "", "effect mode (wave, spectrum, breath, starlight, ripple)")
 	brightness = flag.Float64("brightness", -1, "brightness (between 0 and 100)")
+	top        = flag.Bool("top", false, "top mode")
+	theme      = flag.String("theme", "", "theme mode")
+	effect     = flag.String("effect", "", "effect mode (wave, spectrum, breath, starlight, ripple)")
 )
 
 func main() {
@@ -39,9 +41,41 @@ func main() {
 		d.SetBrightness(*brightness)
 	}
 
-	if *effect != "" {
+	if *theme == "happy" {
+		k.SetColor(color.RGBA{255, 0, 0, 0})
+		pal := colorful.FastHappyPalette(9)
+		for _, key := range k.FnKeys {
+			key.Color = pal[0]
+		}
+		for _, key := range k.Numerics {
+			key.Color = pal[1]
+		}
+		for _, key := range k.Letters {
+			key.Color = pal[6]
+		}
+		for _, key := range k.Symbols {
+			key.Color = pal[3]
+		}
+		for _, key := range k.Commandos {
+			key.Color = pal[4]
+		}
+		for _, key := range k.Actions {
+			key.Color = pal[5]
+		}
+		for _, key := range k.Cursor {
+			key.Color = pal[2]
+		}
+		for _, key := range k.Arrows {
+			key.Color = pal[7]
+		}
+		for _, key := range k.Special {
+			key.Color = pal[8]
+		}
+		d.SetKeys(k)
+	} else if *effect != "" {
 		d.SetEffect(razer.StringToEffect(*effect))
 	} else if *top {
+		base := 2.5
 		for {
 			cpuUsage, err := cpu.Percent(0, false)
 			if err != nil {
@@ -50,36 +84,46 @@ func main() {
 			// fmt.Println("CPU usage:", cpuUsage[0])
 
 			for x := 0; x < cols; x++ {
-				var hue = ((1.5 + (float64(x) / float64(cols-1))) * 120)
+				var hue = ((base - (float64(x) / float64(cols-1))) * 120)
 				c := colorful.Hsl(hue, 1.0, 0.5)
 
 				if x > int(float64(cols-1)*(cpuUsage[0]/100)) {
-					c = colorful.Hsl(hue, 1.0, 0.015)
+					c = colorful.Hsl(hue, 1.0, 0.025)
 				}
 
 				for y := 0; y < rows; y++ {
-					k.SetColor(y, x, c)
+					k.Key(y, x).Color = c
 				}
 			}
 			d.SetKeys(k)
 
 			time.Sleep(200 * time.Millisecond)
+			base -= 0.015
+			if base < 0 {
+				base = 3
+			}
 		}
 	} else if *col != "" {
 		c, err := colorful.Hex(*col)
 		if err != nil {
 			panic(err)
 		}
-		k.SetStaticColor(c)
-		d.SetKeys(k)
+
+		var a []interface{}
+		r, g, b, _ := c.RGBA()
+		a = append(a, uint8(r>>8))
+		a = append(a, uint8(g>>8))
+		a = append(a, uint8(b>>8))
+
+		d.SetEffect(razer.EffectStatic, a...)
 	} else {
 		pal := colorful.FastHappyPalette(rows)
 		for y := 0; y < rows; y++ {
 			for x := 0; x < cols; x++ {
-				k.SetColor(y, x, pal[y])
+				k.Key(y, x).Color = pal[y]
 				d.SetKeys(k)
+				time.Sleep(5 * time.Millisecond)
 			}
-			time.Sleep(10 * time.Millisecond)
 		}
 	}
 }
