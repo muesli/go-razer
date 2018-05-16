@@ -10,8 +10,8 @@ import (
 
 // Device represents a single Razer device
 type Device struct {
-	Name string
-
+	Name       string
+	keys       Keys
 	dbusObject dbus.BusObject
 }
 
