@@ -2,6 +2,7 @@ package razer
 
 import (
 	"fmt"
+	"image/color"
 	"strings"
 
 	"github.com/godbus/dbus"
@@ -24,11 +25,28 @@ const (
 	EffectRippleRandom
 )
 
-// Effect type safety
-type Effect int
+type Effect struct {
+	Name string
+	Type EffectType
 
-// StringToEffect converts a string to an Effect
-func StringToEffect(s string) Effect {
+	primary   color.Color
+	secondary color.Color
+}
+
+// Effect type safety
+type EffectType int
+
+func NewEffect(e EffectType, primary, secondary color.Color) Effect {
+	return Effect{
+		Name:      effectToDBusMethod(e),
+		Type:      e,
+		primary:   primary,
+		secondary: secondary,
+	}
+}
+
+// StringToEffectType converts a string to an Effect
+func StringToEffectType(s string) EffectType {
 	switch strings.ToLower(s) {
 	case "static":
 		return EffectStatic
@@ -60,7 +78,7 @@ func StringToEffect(s string) Effect {
 }
 
 // effectToDBusMethod returns the name of the DBus method matching the Effect
-func effectToDBusMethod(e Effect) string {
+func effectToDBusMethod(e EffectType) string {
 	switch e {
 	case EffectStatic:
 		return "Static"
@@ -91,25 +109,31 @@ func effectToDBusMethod(e Effect) string {
 	return "None"
 }
 
-func defaultEffectArgs(e Effect) []interface{} {
+func (e Effect) arguments() []interface{} {
 	var a []interface{}
 
-	switch e {
+	switch e.Type {
 	case EffectStatic:
-		a = append(a, []interface{}{0, 255, 0}...)
-	case EffectReactive:
-		a = append(a, []interface{}{255, 255, 0, 1}...)
+		fallthrough
 	case EffectBreath:
-		a = append(a, []interface{}{255, 0, 0}...)
+		a = append(a, colorToEffectArg(e.primary)...)
+	case EffectReactive:
+		a = append(a, colorToEffectArg(e.primary)...)
+		a = append(a, 1)
 	case EffectBreathDual:
-		a = append(a, []interface{}{255, 0, 0, 0, 0, 255}...)
+		a = append(a, colorToEffectArg(e.primary)...)
+		a = append(a, colorToEffectArg(e.secondary)...)
 	case EffectStarlight:
-		a = append(a, []interface{}{100, 255, 0, 0}...)
+		a = append(a, 100)
+		a = append(a, colorToEffectArg(e.primary)...)
 	case EffectStarlightDual:
-		a = append(a, []interface{}{100, 255, 0, 0, 0, 0, 255}...)
+		a = append(a, 100)
+		a = append(a, colorToEffectArg(e.primary)...)
+		a = append(a, colorToEffectArg(e.secondary)...)
 	case EffectStarlightRandom:
 		a = append(a, 100)
 	case EffectRipple:
+		a = append(a, colorToEffectArg(e.primary)...)
 		a = append(a, 0.0)
 	case EffectRippleRandom:
 		a = append(a, 0.0)
@@ -121,21 +145,28 @@ func defaultEffectArgs(e Effect) []interface{} {
 }
 
 // SetEffect activates an Effect
-func (d *Device) SetEffect(effect Effect, args ...interface{}) {
+func (d *Device) SetEffect(effect Effect) {
 	var call *dbus.Call
 
-	if len(args) == 0 {
-		args = defaultEffectArgs(effect)
-	}
-
-	switch effect {
+	switch effect.Type {
 	case EffectRipple:
 		fallthrough
 	case EffectRippleRandom:
-		call = d.dbusObject.Call(fmt.Sprintf("razer.device.lighting.custom.set%s", effectToDBusMethod(effect)), 0, args...)
+		call = d.dbusObject.Call(fmt.Sprintf("razer.device.lighting.custom.set%s", effect.Name), 0, effect.arguments()...)
 	default:
-		call = d.dbusObject.Call(fmt.Sprintf("razer.device.lighting.chroma.set%s", effectToDBusMethod(effect)), 0, args...)
+		call = d.dbusObject.Call(fmt.Sprintf("razer.device.lighting.chroma.set%s", effect.Name), 0, effect.arguments()...)
 	}
 
 	dbusCall(call)
+}
+
+// colorToEffectArg converts a color to a valid effect argument
+func colorToEffectArg(c color.Color) []interface{} {
+	var a []interface{}
+	r, g, b, _ := c.RGBA()
+	a = append(a, uint8(r>>8))
+	a = append(a, uint8(g>>8))
+	a = append(a, uint8(b>>8))
+
+	return a
 }
