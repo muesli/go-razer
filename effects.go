@@ -25,6 +25,7 @@ const (
 	EffectRippleRandom
 )
 
+// Effect represents a hardware effect
 type Effect struct {
 	Name string
 	Type EffectType
@@ -33,9 +34,10 @@ type Effect struct {
 	secondary color.Color
 }
 
-// Effect type safety
+// EffectType for type safety
 type EffectType int
 
+// NewEffect returns a new Effect
 func NewEffect(e EffectType, primary, secondary color.Color) Effect {
 	return Effect{
 		Name:      effectToDBusMethod(e),
