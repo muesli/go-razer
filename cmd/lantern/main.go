@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image/color"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/lucasb-eyer/go-colorful"
@@ -18,7 +19,7 @@ var (
 	effect     = flag.String("effect", "", "effect mode (reactive, wave, spectrum, breath[dual,random], starlight[dual,random], ripple[random])")
 	primary    = flag.String("color", "#ff0000", "Sets the primary keyboard color")
 	secondary  = flag.String("secondary", "#00ff00", "secondary color (for 'dual' effect modes)")
-	theme      = flag.String("theme", "", "theme mode (happy, rainbow)")
+	theme      = flag.String("theme", "", "theme mode (happy, soft, warm, rainbow, random)")
 	top        = flag.Bool("top", false, "top mode")
 )
 
@@ -70,11 +71,23 @@ func rainbowTheme(d razer.Device) {
 	}
 }
 
-func happyTheme(d razer.Device) {
+func happyTheme(d razer.Device, theme string) {
 	k := d.Keys()
 	k.SetColor(color.RGBA{255, 0, 0, 0})
 
-	pal := colorful.FastHappyPalette(9)
+	var pal []colorful.Color
+	switch theme {
+	case "happy":
+		pal = colorful.FastHappyPalette(9)
+	case "warm":
+		pal = colorful.FastWarmPalette(9)
+	case "soft":
+		pal, _ = colorful.SoftPalette(9)
+	case "random":
+		rand.Seed(time.Now().UTC().UnixNano())
+		pal, _ = colorful.HappyPalette(9)
+	}
+
 	k.FnKeys.SetColor(pal[0])
 	k.Numerics.SetColor(pal[1])
 	k.Cursor.SetColor(pal[2])
@@ -115,8 +128,8 @@ func main() {
 
 	if *theme == "rainbow" {
 		rainbowTheme(d)
-	} else if *theme == "happy" {
-		happyTheme(d)
+	} else if *theme != "" {
+		happyTheme(d, *theme)
 	} else if *effect != "" {
 		d.SetEffect(razer.NewEffect(razer.StringToEffectType(*effect), primaryColor, secondaryColor))
 	} else if *top {

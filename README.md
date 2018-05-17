@@ -43,8 +43,8 @@ $ lantern -brightness 100 -top
 
 ### Themes
 
-There are currently only two available themes (feel free to submit more!) named
-`happy` and `rainbow`. To try them out, run:
+There are currently only a few available themes (feel free to submit more!)
+named `happy`, `soft`, `warm`, `rainbow` and `random`. To try them out, run:
 
 ```
 $ lantern -brightness 100 -theme happy
