@@ -29,12 +29,17 @@ type Keys struct {
 	rows []KeySet
 }
 
+// SetColor sets a single color on all keys in the KeySet
+func (k KeySet) SetColor(c color.Color) {
+	for _, key := range k {
+		key.Color = c
+	}
+}
+
 // SetColor sets a single color on all keys
-func (k *Keys) SetColor(color color.Color) {
+func (k *Keys) SetColor(c color.Color) {
 	for _, r := range k.rows {
-		for _, k := range r {
-			k.Color = color
-		}
+		r.SetColor(c)
 	}
 }
 
@@ -137,10 +142,10 @@ func (d *Device) setKeyRow(row []byte) {
 	dbusCall(d.dbusObject.Call("razer.device.lighting.chroma.setKeyRow", 0, row))
 }
 
-func (r KeySet) message() []byte {
+func (k KeySet) message() []byte {
 	var m []byte
 
-	for _, v := range r {
+	for _, v := range k {
 		var r, g, b uint32
 		if v.Color != nil {
 			r, g, b, _ = v.Color.RGBA()
