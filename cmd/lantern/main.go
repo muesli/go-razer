@@ -72,36 +72,18 @@ func rainbowTheme(d razer.Device) {
 
 func happyTheme(d razer.Device) {
 	k := d.Keys()
-
 	k.SetColor(color.RGBA{255, 0, 0, 0})
+
 	pal := colorful.FastHappyPalette(9)
-	for _, key := range k.FnKeys {
-		key.Color = pal[0]
-	}
-	for _, key := range k.Numerics {
-		key.Color = pal[1]
-	}
-	for _, key := range k.Letters {
-		key.Color = pal[6]
-	}
-	for _, key := range k.Symbols {
-		key.Color = pal[3]
-	}
-	for _, key := range k.Commandos {
-		key.Color = pal[4]
-	}
-	for _, key := range k.Actions {
-		key.Color = pal[5]
-	}
-	for _, key := range k.Cursor {
-		key.Color = pal[2]
-	}
-	for _, key := range k.Arrows {
-		key.Color = pal[7]
-	}
-	for _, key := range k.Special {
-		key.Color = pal[8]
-	}
+	k.FnKeys.SetColor(pal[0])
+	k.Numerics.SetColor(pal[1])
+	k.Cursor.SetColor(pal[2])
+	k.Symbols.SetColor(pal[3])
+	k.Commandos.SetColor(pal[4])
+	k.Actions.SetColor(pal[5])
+	k.Letters.SetColor(pal[6])
+	k.Arrows.SetColor(pal[7])
+	k.Special.SetColor(pal[8])
 	d.SetKeys(k)
 }
 
