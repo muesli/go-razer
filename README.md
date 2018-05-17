@@ -36,7 +36,8 @@ $ lantern -brightness 100 -top
 
 ### Themes
 
-There's currently only one available theme (feel free to submit more!) named `happy`. To enable it, run:
+There are currently only two available themes (feel free to submit more!) named
+`happy` and `rainbow`. To try them out, run:
 
 ```
 $ lantern -brightness 100 -theme happy
