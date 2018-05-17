@@ -14,10 +14,10 @@ import (
 )
 
 var (
-	primary    = flag.String("color", "#ff0000", "Sets the primary keyboard color")
-	secondary  = flag.String("secondary", "#00ff00", "secondary color (for 'dual' effect modes)")
 	brightness = flag.Float64("brightness", -1, "brightness (between 0 and 100)")
 	effect     = flag.String("effect", "", "effect mode (reactive, wave, spectrum, breath[dual,random], starlight[dual,random], ripple[random])")
+	primary    = flag.String("color", "#ff0000", "Sets the primary keyboard color")
+	secondary  = flag.String("secondary", "#00ff00", "secondary color (for 'dual' effect modes)")
 	theme      = flag.String("theme", "", "theme mode (happy, rainbow)")
 	top        = flag.Bool("top", false, "top mode")
 )
@@ -39,7 +39,7 @@ func topMode(d razer.Device) {
 			c := colorful.Hsl(hue, 1.0, 0.5)
 
 			if x > int(float64(cols-1)*(cpuUsage[0]/100)) {
-				c = colorful.Hsl(hue, 1.0, 0.025)
+				c = colorful.Hsl(hue, 1.0, 0.02)
 			}
 
 			for y := 0; y < rows; y++ {
