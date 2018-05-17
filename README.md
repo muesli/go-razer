@@ -24,6 +24,13 @@ Available effects are `wave`, `reactive`, `spectrum`, `breath`, `breathdual`, `b
 
 ```
 $ lantern -brightness 90 -effect wave
+$ lantern -brightness 90 -effect starlightdual -color "#00ff00" -secondary "#aa00aa"
+```
+
+### Plain Background Color
+
+```
+$ lantern -color "#6b6b00"
 ```
 
 ### top Mode
