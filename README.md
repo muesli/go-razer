@@ -35,7 +35,7 @@ $ lantern -color "#6b6b00"
 
 ### top Mode
 
-You can monitor your system's CPU usage by running:
+Monitor your system's CPU usage by turning your keyboard into a gauge:
 
 ```
 $ lantern -brightness 100 -top
