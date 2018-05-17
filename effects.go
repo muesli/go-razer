@@ -34,8 +34,6 @@ func StringToEffect(s string) Effect {
 		return EffectStatic
 	case "reactive":
 		return EffectReactive
-	case "wave":
-		return EffectWave
 	case "spectrum":
 		return EffectSpectrum
 	case "breath":
@@ -54,6 +52,8 @@ func StringToEffect(s string) Effect {
 		return EffectRipple
 	case "ripplerandom":
 		return EffectRippleRandom
+	case "wave":
+		return EffectWave
 	}
 
 	return EffectNone
@@ -66,8 +66,6 @@ func effectToDBusMethod(e Effect) string {
 		return "Static"
 	case EffectReactive:
 		return "Reactive"
-	case EffectWave:
-		return "Wave"
 	case EffectSpectrum:
 		return "Spectrum"
 	case EffectBreath:
@@ -86,6 +84,8 @@ func effectToDBusMethod(e Effect) string {
 		return "Ripple"
 	case EffectRippleRandom:
 		return "RippleRandomColour"
+	case EffectWave:
+		return "Wave"
 	}
 
 	return "None"
@@ -96,46 +96,25 @@ func defaultEffectArgs(e Effect) []interface{} {
 
 	switch e {
 	case EffectStatic:
-		a = append(a, 0)
-		a = append(a, 255)
-		a = append(a, 0)
+		a = append(a, []interface{}{0, 255, 0}...)
 	case EffectReactive:
-		a = append(a, 255)
-		a = append(a, 255)
-		a = append(a, 0)
-		a = append(a, 1)
-	case EffectWave:
-		a = append(a, 1)
+		a = append(a, []interface{}{255, 255, 0, 1}...)
 	case EffectBreath:
-		a = append(a, 255)
-		a = append(a, 0)
-		a = append(a, 0)
+		a = append(a, []interface{}{255, 0, 0}...)
 	case EffectBreathDual:
-		a = append(a, 255)
-		a = append(a, 0)
-		a = append(a, 0)
-		a = append(a, 0)
-		a = append(a, 0)
-		a = append(a, 255)
+		a = append(a, []interface{}{255, 0, 0, 0, 0, 255}...)
 	case EffectStarlight:
-		a = append(a, 100)
-		a = append(a, 255)
-		a = append(a, 0)
-		a = append(a, 0)
+		a = append(a, []interface{}{100, 255, 0, 0}...)
 	case EffectStarlightDual:
-		a = append(a, 100)
-		a = append(a, 255)
-		a = append(a, 0)
-		a = append(a, 0)
-		a = append(a, 0)
-		a = append(a, 0)
-		a = append(a, 255)
+		a = append(a, []interface{}{100, 255, 0, 0, 0, 0, 255}...)
 	case EffectStarlightRandom:
 		a = append(a, 100)
 	case EffectRipple:
 		a = append(a, 0.0)
 	case EffectRippleRandom:
 		a = append(a, 0.0)
+	case EffectWave:
+		a = append(a, 1)
 	}
 
 	return a
