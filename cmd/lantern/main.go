@@ -122,6 +122,9 @@ func main() {
 	d := devs[0]
 
 	fmt.Printf("Found %s\n", d.String())
+	if d.Brightness() == 0 && *brightness == -1 {
+		*brightness = 100
+	}
 	if *brightness >= 0 {
 		d.SetBrightness(*brightness)
 	}
