@@ -23,8 +23,8 @@ following command to install it:
 Available effects are `wave`, `reactive`, `spectrum`, `breath`, `breathdual`, `breathrandom`, `starlight`, `starlightdual`, `starlightrandom`, `ripple` and `ripplerandom`.
 
 ```
-$ lantern -brightness 90 -effect wave
-$ lantern -brightness 90 -effect starlightdual -color "#00ff00" -secondary "#aa00aa"
+$ lantern -effect wave
+$ lantern -effect starlightdual -color "#00ff00" -secondary "#aa00aa"
 ```
 
 ### Plain Background Color
@@ -38,7 +38,7 @@ $ lantern -color "#6b6b00"
 Monitor your system's CPU usage by turning your keyboard into a gauge:
 
 ```
-$ lantern -brightness 100 -top
+$ lantern -top
 ```
 
 ### Themes
@@ -47,8 +47,19 @@ There are currently only a few available themes (feel free to submit more!)
 named `happy`, `soft`, `warm`, `rainbow` and `random`. To try them out, run:
 
 ```
-$ lantern -brightness 100 -theme happy
+$ lantern -theme happy
 ```
+
+### Brightness
+
+You can change the brightness (value in percent) by running:
+
+```
+$ lantern -brightness 80
+```
+
+The `brightness` parameter can also be used in combination with any of the
+modes described above.
 
 ## Development
 
