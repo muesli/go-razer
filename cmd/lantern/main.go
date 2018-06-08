@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/lucasb-eyer/go-colorful"
+	"github.com/muesli/gamut/palette"
 	"github.com/shirou/gopsutil/cpu"
 
 	"github.com/muesli/go-razer"
@@ -86,17 +87,33 @@ func happyTheme(d razer.Device, theme string) {
 	case "random":
 		rand.Seed(time.Now().UTC().UnixNano())
 		pal, _ = colorful.HappyPalette(9)
+	case "monokai":
+		for _, c := range palette.Monokai.Colors() {
+			cf, _ := colorful.MakeColor(c.Color)
+			fmt.Println("Color:", c.Name, cf.Hex())
+			pal = append(pal, cf)
+		}
+	default:
+		p := palette.AllPalettes().Filter(theme)
+		if len(p) == 0 {
+			log.Fatalf("Could not find colors by that name")
+		}
+		for _, c := range p {
+			cf, _ := colorful.MakeColor(c.Color)
+			fmt.Println("Color:", c.Name, cf.Hex())
+			pal = append(pal, cf)
+		}
 	}
 
-	k.FnKeys.SetColor(pal[0])
-	k.Numerics.SetColor(pal[1])
-	k.Cursor.SetColor(pal[2])
-	k.Symbols.SetColor(pal[3])
-	k.Commandos.SetColor(pal[4])
-	k.Actions.SetColor(pal[5])
-	k.Letters.SetColor(pal[6])
-	k.Arrows.SetColor(pal[7])
-	k.Special.SetColor(pal[8])
+	k.FnKeys.SetColor(pal[0%len(pal)])
+	k.Numerics.SetColor(pal[1%len(pal)])
+	k.Cursor.SetColor(pal[2%len(pal)])
+	k.Symbols.SetColor(pal[3%len(pal)])
+	k.Commandos.SetColor(pal[4%len(pal)])
+	k.Actions.SetColor(pal[5%len(pal)])
+	k.Letters.SetColor(pal[6%len(pal)])
+	k.Arrows.SetColor(pal[7%len(pal)])
+	k.Special.SetColor(pal[8%len(pal)])
 	d.SetKeys(k)
 }
 
