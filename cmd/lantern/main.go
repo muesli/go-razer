@@ -50,7 +50,7 @@ func topMode(d razer.Device) {
 		}
 		d.SetKeys(k)
 
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(300 * time.Millisecond)
 		base -= 0.015
 		if base < 0 {
 			base = 3
