@@ -4,7 +4,7 @@ Control your Razer (Chroma) devices from Go
 
 ## Installation
 
-Make sure you have a working Go environment (Go 1.7 or higher is required).
+Make sure you have a working Go environment (Go 1.9 or higher is required).
 See the [install instructions](http://golang.org/doc/install.html).
 
 To install go-razer, simply run:
