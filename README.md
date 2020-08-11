@@ -1,6 +1,11 @@
 # go-razer
 
-Control your Razer (Chroma) devices from Go
+Control Razer (Chroma) devices from the CLI or your Go apps
+
+[![Latest Release](https://img.shields.io/github/release/muesli/go-razer.svg)](https://github.com/muesli/go-razer/releases)
+[![Build Status](https://github.com/muesli/go-razer/workflows/build/badge.svg)](https://github.com/muesli/go-razer/actions)
+[![Go ReportCard](http://goreportcard.com/badge/muesli/go-razer)](http://goreportcard.com/report/muesli/go-razer)
+[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/muesli/go-razer)
 
 ## Installation
 
@@ -60,9 +65,3 @@ $ lantern -brightness 80
 
 The `brightness` parameter can also be used in combination with any of the
 modes described above.
-
-## Development
-
-[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/go-razer)
-[![Build Status](https://travis-ci.org/muesli/go-razer.svg?branch=master)](https://travis-ci.org/muesli/go-razer)
-[![Go ReportCard](http://goreportcard.com/badge/muesli/go-razer)](http://goreportcard.com/report/muesli/go-razer)
