@@ -1,11 +1,11 @@
 # go-razer
 
-Control Razer (Chroma) devices from the CLI or your Go apps
-
 [![Latest Release](https://img.shields.io/github/release/muesli/go-razer.svg)](https://github.com/muesli/go-razer/releases)
 [![Build Status](https://github.com/muesli/go-razer/workflows/build/badge.svg)](https://github.com/muesli/go-razer/actions)
 [![Go ReportCard](http://goreportcard.com/badge/muesli/go-razer)](http://goreportcard.com/report/muesli/go-razer)
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/muesli/go-razer)
+
+Control Razer (Chroma) devices from the CLI or your Go apps
 
 ## Installation
 
